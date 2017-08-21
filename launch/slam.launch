@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="/opt/ros/indigo/share/turtlebot_bringup/launch/minimal.launch" />
+  <include file="/opt/ros/indigo/share/turtlebot_navigation/launch/gmapping_demo.launch" />
+  <include file="/opt/ros/indigo/share/frontier_exploration/launch/global_map.launch" />
+</launch>
