@@ -7,7 +7,6 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
         - /Map1
-        - /Map1/Status1
         - /Local Planning1
         - /Global Planning1
         - /Global Planning1/Planner1
@@ -118,11 +117,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        mount_asus_xtion_pro_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         plate_bottom_link:
           Alpha: 1
           Show Axes: false
@@ -374,7 +368,7 @@ Visualization Manager:
       Draw Behind: false
       Enabled: true
       Name: Map
-      Topic: /karto_map
+      Topic: /map
       Unreliable: false
       Value: true
     - Class: rviz/Group
@@ -426,7 +420,7 @@ Visualization Manager:
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 490.3
+          Max Intensity: 452.7
           Min Color: 0; 0; 0
           Min Intensity: 0
           Name: Cost Cloud
@@ -593,16 +587,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 19.1137
+      Distance: 29.6427
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 5.01262
-        Y: 4.28547
-        Z: -0.424504
+        X: 1.73977
+        Y: 7.77225
+        Z: -0.290818
       Name: Current View
       Near Clip Distance: 0.01
       Pitch: 1.5348

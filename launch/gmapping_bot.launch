@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- Turtlebot bringup -->
+  <include file="/opt/ros/indigo/share/turtlebot_bringup/launch/minimal.launch">
+    <arg name="3d_sensor" value="astra" />
+  </include>
+
+  <include file="$(find turtlebot_navigation)/launch/gmapping_demo.launch" />
+</launch>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <launch>
-
   <rosparam file="$(find mappingturtles)/param/ros.yaml" />
-
   <arg name="base" default="$(optenv TURTLEBOT_BASE kobuki)" />
   <arg name="stacks" default="$(optenv TURTLEBOT_STACKS hexagons)" />
   <arg name="3d_sensor" default="$(optenv TURTLEBOT_3D_SENSOR astra)" />
+
   <!-- Real Turtlebot -->
   <include file="$(find turtlebot_bringup)/launch/minimal.launch">
     <arg name="base" value="$(arg base)" />
@@ -20,6 +19,9 @@
     <arg name="scan_topic" value="/scan" />
   </include>
 
+  <!-- Move base --> 
+  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml" />
+
   <!-- Start Mapper to generate map from laser scans -->
   <node name="Mapper" pkg="nav2d_karto" type="mapper">
     <remap from="map" to="karto_map" />
@@ -27,9 +29,4 @@
     <remap from="base_laser_link" to="camera_link" />
     <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml" />
   </node>
-  
-  <node name="GetMap" pkg="nav2d_navigator" type="get_map_client" />
-
-  <!-- Move base --> 
-  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml" />
 </launch>
