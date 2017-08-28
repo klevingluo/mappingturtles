@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- 
-  Turtlebot navigation simulation:
-  - stage
-  - map_server
-  - move_base
-  - static map
-  - amcl
-  - rviz view
- -->
+
 <launch>
   <arg name="base"       default="$(optenv TURTLEBOT_BASE kobuki)"/>  <!-- create, rhoomba -->
   <arg name="stacks"     default="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->

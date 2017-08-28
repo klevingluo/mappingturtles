@@ -1,5 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0"?>
 <launch>
+
+	<!-- Some general parameters -->
+	<param name="use_sim_time" value="true" />
+
+	<!-- Start Stage simulator with a given environment -->
+	<node name="Stage" pkg="stage_ros" type="stageros" args="$(find nav2d_tutorials)/world/tutorial4.world">
+		<param name="base_watchdog_timeout" value="0" />
+	</node>
 
 	<!-- Start the joystick-driver and remote-controller for operation-->
 	<node name="Joystick" pkg="joy" type="joy_node" />
@@ -19,6 +27,8 @@
 			<remap from="karto_out" to="/shared_scans_r1"/>
 			<rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
 		</node>
+
+    <include file="$(find mappingturtles)/launch/ase_slam_layer.launch" />
 	</group>
 
 	<group ns="robot_1">
