@@ -20,7 +20,9 @@ floorplan
 )
 
 # throw in a robot
-turtlebot
+# pioneer3at
+# turtlebot
+pioneer3at
 (
   pose [0 -2 0 0]
   name "robot1"
@@ -28,10 +30,10 @@ turtlebot
 )
 
 # throw in a robot
-turtlebot
+pioneer3at
 (
   pose [0 -1 0 45]
-  name "robot1"
+  name "robot0"
   color "blue"
 )
 

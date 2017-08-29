@@ -8,7 +8,6 @@
     <param name="base_watchdog_timeout" value="0.2" />
   </node>
 
-
   <group ns="robot_0">
     <arg name="base"       default="$(optenv TURTLEBOT_BASE kobuki)"/>  <!-- create, rhoomba -->
     <arg name="stacks"     default="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->
@@ -52,7 +51,12 @@
       <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
     </node>
 
-    <include file="$(find mappingturtles)/launch/ase_slam_layer.launch" />
+    <include file="$(find mappingturtles)/launch/ase_slam_layer.launch">
+      <arg name="botspace" value="/robot_0" />
+    </include>
+
+    <param name="ase_exploration_planer_node/map_frame_id" value="robot_0/map" />
+    <param name="ase_exploration_planer_node/base_frame_id" value="robot_0/base_link" />
   </group>
 
   <group ns="robot_1">
@@ -96,7 +100,11 @@
       <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
     </node>
 
-    <include file="$(find mappingturtles)/launch/ase_slam_layer.launch" />
+    <include file="$(find mappingturtles)/launch/ase_slam_layer.launch">
+      <arg name="botspace" value="/robot_1" />
+    </include>
+    <param name="ase_exploration_planer_node/map_frame_id" value="/robot_1/map" />
+    <param name="ase_exploration_planer_node/base_frame_id" value="/robot_1/base_link" />
   </group>
 
   <!-- RVIZ to view the visualization -->

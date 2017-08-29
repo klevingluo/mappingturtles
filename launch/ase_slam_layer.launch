@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="botspace" default="/robot_0" />
   <!-- Frontier exploration used as fallback solution -->
   <node pkg="frontier_exploration" type="explore_server" name="frontier_exploration" output="screen">
     <rosparam file="$(find ase_exploration)/param/frontier_exploration.yaml" command="load" ns="explore_costmap"/>
@@ -7,21 +8,21 @@
   <!-- ase_exploration_node -->
   <node pkg="ase_exploration" type="ase_exploration_planner_node" name="ase_exploration_planner_node" output="screen">
     <!-- Subscribed topics -->
-    <remap from="map" to="/robot_0/map"/>
-    <remap from="costmap" to="/robot_0/move_base/global_costmap/costmap"/>
-    <remap from="costmap_updates" to="/robot_0/move_base/global_costmap/costmap_updates"/>
+    <remap from="map" to="$(arg botspace)/map"/>
+    <remap from="costmap" to="$(arg botspace)/move_base/global_costmap/costmap"/>
+    <remap from="costmap_updates" to="$(arg botspace)/move_base/global_costmap/costmap_updates"/>
     
     <!-- Action where move_base may be found -->
-    <remap from="move_base" to="/robot_0/move_base"/>
+    <remap from="move_base" to="$(arg botspace)/move_base"/>
     
     <!-- Published topics -->
-    <remap from="planner_paths" to="/robot_0/planner_paths"/>
+    <remap from="planner_paths" to="$(arg botspace)/planner_paths"/>
     
     <!-- Frontier exploration services -->
     <remap from="frontier_exploration/explore_costmap/explore_boundary/update_boundary_polygon" 
-      to="/robot_0/frontier_exploration/explore_costmap/explore_boundary/update_boundary_polygon"/>
+      to="$(arg botspace)/frontier_exploration/explore_costmap/explore_boundary/update_boundary_polygon"/>
     <remap from="frontier_exploration/explore_costmap/explore_boundary/get_next_frontier" 
-      to="/robot_0/frontier_exploration/explore_costmap/explore_boundary/get_next_frontier"/>
+      to="$(arg botspace)/frontier_exploration/explore_costmap/explore_boundary/get_next_frontier"/>
     
     <!-- Read all parameters -->
     <rosparam file="$(find mappingturtles)/param/planner.yaml" command="load"/>
