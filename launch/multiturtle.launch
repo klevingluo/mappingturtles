@@ -1,22 +1,23 @@
 <?xml version="1.0"?>
 <launch>
-	<!-- Some general parameters -->
-	<param name="use_sim_time" value="true" />
+  <!-- Some general parameters -->
+  <param name="use_sim_time" value="true" />
 
-	<!-- Start Stage simulator with a given environment -->
-	<node name="Stage" pkg="stage_ros" type="stageros" args="$(find nav2d_tutorials)/world/tutorial4.world">
-		<param name="base_watchdog_timeout" value="0.2" />
-	</node>
+  <!-- Start Stage simulator with a given environment -->
+  <node name="Stage" pkg="stage_ros" type="stageros" args="$(find mappingturtles)/world/tutorial4.world">
+    <param name="base_watchdog_timeout" value="0.2" />
+  </node>
 
 
-	<group ns="robot_0">
-	  <node name="R0_MapAlign" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /robot_0/map 100"/>
+  <group ns="robot_0">
     <arg name="base"       default="$(optenv TURTLEBOT_BASE kobuki)"/>  <!-- create, rhoomba -->
     <arg name="stacks"     default="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->
     <arg name="3d_sensor"  default="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro -->
-		<param name="robot_id" value="1" />
-		<param name="tf_prefix" type="string" value="robot_0"/>
-		<rosparam file="$(find nav2d_tutorials)/param/ros.yaml"/>
+    <param name="robot_id" value="1" />
+    <param name="tf_prefix" type="string" value="robot_0"/>
+    <rosparam file="$(find nav2d_tutorials)/param/ros.yaml"/>
+
+    <node name="R0_MapAlign" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /robot_0/map 100"/>
 
     <!--  ***************** Robot Model *****************  -->
     <include file="$(find turtlebot_bringup)/launch/includes/robot.launch.xml">
@@ -27,6 +28,13 @@
 
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
       <param name="use_gui" value="false"/>
+    </node>
+
+    <!-- Command Velocity multiplexer -->
+    <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+      <param name="yaml_cfg_file" value="$(find turtlebot_bringup)/param/mux.yaml"/>
+      <remap from="cmd_vel_mux/output" to="cmd_vel"/>
     </node>
 
     <!-- Navigation stack --> 
@@ -37,24 +45,24 @@
     </include>
 
 
-		<node name="Mapper" pkg="nav2d_karto" type="mapper">
-			<remap from="scan" to="base_scan"/>
-			<remap from="karto_in" to="/shared_scans_r2"/>
-			<remap from="karto_out" to="/shared_scans_r1"/>
-			<rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
-		</node>
+    <node name="Mapper" pkg="nav2d_karto" type="mapper">
+      <remap from="scan" to="base_scan"/>
+      <remap from="karto_in" to="/shared_scans_r2"/>
+      <remap from="karto_out" to="/shared_scans_r1"/>
+      <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
+    </node>
 
     <include file="$(find mappingturtles)/launch/ase_slam_layer.launch" />
-	</group>
+  </group>
 
-	<group ns="robot_1">
-	  <node name="R1_MapAlign" pkg="tf" type="static_transform_publisher" args="40 0 0 0 0 0 /map /robot_1/map 100"/>
+  <group ns="robot_1">
+    <node name="R1_MapAlign" pkg="tf" type="static_transform_publisher" args="40 0 0 0 0 0 /map /robot_1/map 100"/>
     <arg name="base"       default="$(optenv TURTLEBOT_BASE kobuki)"/>  <!-- create, rhoomba -->
     <arg name="stacks"     default="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->
     <arg name="3d_sensor"  default="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro -->
-		<param name="robot_id" value="2" />
-		<param name="tf_prefix" type="string" value="robot_1"/>
-		<rosparam file="$(find nav2d_tutorials)/param/ros.yaml"/>
+    <param name="robot_id" value="2" />
+    <param name="tf_prefix" type="string" value="robot_1"/>
+    <rosparam file="$(find nav2d_tutorials)/param/ros.yaml"/>
 
     <!--  ***************** Robot Model *****************  -->
     <include file="$(find turtlebot_bringup)/launch/includes/robot.launch.xml">
@@ -67,21 +75,30 @@
       <param name="use_gui" value="false"/>
     </node>
 
-    <!--  ************** Navigation  ***************  -->
-    <include file="$(find turtlebot_navigation)/launch/includes/amcl/amcl.launch.xml"> 
-      <param name="global_frame_id" value="/map"/>
-      <param name="odom_frame_id" value="robot_0/odom"/>
-      <param name="base_frame_id" value="robot_0/base_link"/>
+    <!-- Command Velocity multiplexer -->
+    <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager">
+      <param name="yaml_cfg_file" value="$(find turtlebot_bringup)/param/mux.yaml"/>
+      <remap from="cmd_vel_mux/output" to="cmd_vel"/>
+    </node>
+
+    <!-- Navigation stack --> 
+    <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml">
+      <param name="global_frame_id" value="/robot_0/map"/>
+      <param name="odom_frame_id" value="/robot_0/odom"/>
+      <param name="base_frame_id" value="/robot_0/base_link"/>
     </include>
 
-		<node name="Mapper" pkg="nav2d_karto" type="mapper">
-			<remap from="scan" to="base_scan"/>
-			<remap from="karto_in" to="/shared_scans_r1"/>
-			<remap from="karto_out" to="/shared_scans_r2"/>
-			<rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
-		</node>
-	</group>
+    <node name="Mapper" pkg="nav2d_karto" type="mapper">
+      <remap from="scan" to="base_scan"/>
+      <remap from="karto_in" to="/shared_scans_r1"/>
+      <remap from="karto_out" to="/shared_scans_r2"/>
+      <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
+    </node>
 
-	<!-- RVIZ to view the visualization -->
-	<node name="RVIZ" pkg="rviz" type="rviz" args=" -d $(find mappingturtles)/rviz/multi_turtle.rviz" />
+    <include file="$(find mappingturtles)/launch/ase_slam_layer.launch" />
+  </group>
+
+  <!-- RVIZ to view the visualization -->
+  <node name="RVIZ" pkg="rviz" type="rviz" args=" -d $(find mappingturtles)/rviz/multi_turtle.rviz" />
 </launch>
