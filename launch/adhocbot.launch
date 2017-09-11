@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<launch>
+
+  <param name="use_sim_time" value="true" />
+  <arg name="base" default="$(optenv TURTLEBOT_BASE kobuki)" />
+  <arg name="3d_sensor" default="$(optenv TURTLEBOT_3D_SENSOR astra)" />
+  <arg name="prefix" default=""/>
+
+  <group ns="$(arg prefix)">
+    <param name="use_sim_time" value="true" />
+
+    <param name="laser_frame"     value="$(arg prefix)/base_laser_link" />
+    <param name="robot_frame"     value="$(arg prefix)/base_link" />
+    <param name="odometry_frame"  value="$(arg prefix)/odom" />
+    <param name="offset_frame"    value="$(arg prefix)/offset" />
+    <param name="map_frame"       value="$(arg prefix)/map" />
+    <param name="map_topic"       value="$(arg prefix)/map" />
+    <param name="laser_topic"     value="/robot_0/base_scan" />
+    <param name="map_service"     value="$(arg prefix)/static_map" />
+
+    <!-- Navigation stack --> 
+    <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml" >
+      <arg name="odom_frame_id"   value="/$(arg prefix)/odom"/>
+      <arg name="base_frame_id"   value="/$(arg prefix)/base_footprint"/>
+      <arg name="global_frame_id" value="/$(arg prefix)/odom"/>
+      <arg name="odom_topic"      value="/$(arg prefix)/odom" />
+      <arg name="laser_topic"     value="/$(arg prefix)/base_scan" />
+    </include>
+
+    <!-- Start karto mapper to generate map from laser scans
+    <node name="Mapper" pkg="nav2d_karto" type="mapper">
+      <remap from="base_scan" to ="$(arg prefix)/base_scan" />
+      <remap from="base_laser_link" to="$(arg prefix)/base_laser_link" />
+      <remap from="map" to="$(arg prefix)/map" />
+      <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml" />
+    </node>
+    -->
+
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+      <param name="base_frame" value="$(arg prefix)/base_footprint"/>
+      <param name="odom_frame" value="$(arg prefix)/odom"/>
+      <param name="map_update_interval" value="5.0"/>
+      <param name="maxUrange" value="6.0"/>
+      <param name="maxRange" value="8.0"/>
+      <param name="sigma" value="0.05"/>
+      <param name="kernelSize" value="1"/>
+      <param name="lstep" value="0.05"/>
+      <param name="astep" value="0.05"/>
+      <param name="iterations" value="5"/>
+      <param name="lsigma" value="0.075"/>
+      <param name="ogain" value="3.0"/>
+      <param name="lskip" value="0"/>
+      <param name="minimumScore" value="200"/>
+      <param name="srr" value="0.01"/>
+      <param name="srt" value="0.02"/>
+      <param name="str" value="0.01"/>
+      <param name="stt" value="0.02"/>
+      <param name="linearUpdate" value="0.5"/>
+      <param name="angularUpdate" value="0.436"/>
+      <param name="temporalUpdate" value="-1.0"/>
+      <param name="resampleThreshold" value="0.5"/>
+      <param name="particles" value="80"/>
+      <param name="xmin" value="-1.0"/>
+      <param name="ymin" value="-1.0"/>
+      <param name="xmax" value="1.0"/>
+      <param name="ymax" value="1.0"/>
+
+      <param name="delta" value="0.05"/>
+      <param name="llsamplerange" value="0.01"/>
+      <param name="llsamplestep" value="0.01"/>
+      <param name="lasamplerange" value="0.005"/>
+      <param name="lasamplestep" value="0.005"/>
+      <remap from="scan" to="base_scan"/>
+    </node>
+  </group>
+</launch>

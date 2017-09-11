@@ -7,6 +7,8 @@
   <node name="Stage" pkg="stage_ros" type="stageros" args="$(find mappingturtles)/world/tutorial4.world">
     <param name="base_watchdog_timeout" value="0.2" />
   </node>
+  <node pkg="actionlib" name="axclient0" type="axclient.py" output="screen" args="/robot_0/exploration" />
+  <node pkg="actionlib" name="axclient1" type="axclient.py" output="screen" args="/robot_1/exploration" />
 
   <group ns="robot_0">
     <arg name="base"       default="$(optenv TURTLEBOT_BASE kobuki)"/>  <!-- create, rhoomba -->

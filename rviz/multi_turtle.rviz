@@ -5,9 +5,11 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /robot_01
         - /robot_01/Costmap1
-        - /robot_11/Costmap1
-        - /robot_11/Planner1
+        - /robot_01/R2:Particles1
+        - /robot_11
+        - /robot_11/R2:Particles1
       Splitter Ratio: 0.557143
     Tree Height: 761
   - Class: rviz/Selection
@@ -28,7 +30,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Frontiers
+    SyncSource: ""
 Visualization Manager:
   Class: ""
   Displays:
@@ -206,6 +208,14 @@ Visualization Manager:
           Topic: /robot_0/move_base/local_costmap/costmap
           Unreliable: false
           Value: true
+        - Arrow Length: 0.3
+          Class: rviz/PoseArray
+          Color: 255; 25; 0
+          Enabled: true
+          Name: R2:Particles
+          Topic: /robot_0/Mapper/particles
+          Unreliable: false
+          Value: true
       Enabled: true
       Name: robot_0
     - Class: rviz/Group
@@ -216,7 +226,7 @@ Visualization Manager:
           Draw Behind: false
           Enabled: true
           Name: Costmap
-          Topic: /move_base/local_costmap/costmap
+          Topic: /robot_1/move_base/local_costmap/costmap
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -267,7 +277,7 @@ Visualization Manager:
           Size (Pixels): 3
           Size (m): 0.04
           Style: Flat Squares
-          Topic: /move_base/DWAPlannerROS/cost_cloud
+          Topic: /robot_1/move_base/DWAPlannerROS/cost_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -284,7 +294,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 0
-          Enabled: false
+          Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Max Intensity: 128.275
@@ -297,11 +307,11 @@ Visualization Manager:
           Size (Pixels): 3
           Size (m): 0.04
           Style: Flat Squares
-          Topic: /move_base/DWAPlannerROS/trajectory_cloud
+          Topic: /robot_1/move_base/DWAPlannerROS/cost_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: false
-          Value: false
+          Value: true
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
@@ -322,7 +332,7 @@ Visualization Manager:
           Radius: 0.03
           Shaft Diameter: 0.1
           Shaft Length: 0.1
-          Topic: /robot_0/planner_paths
+          Topic: /robot_1/planner_paths
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -350,7 +360,7 @@ Visualization Manager:
           Size (Pixels): 3
           Size (m): 0.5
           Style: Flat Squares
-          Topic: /robot_0/frontier_exploration/explore_costmap/explore_boundary/frontiers
+          Topic: /robot_1/frontier_exploration/explore_costmap/explore_boundary/frontiers
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -397,7 +407,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -0.155
+      Angle: -0.165
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
@@ -406,11 +416,11 @@ Visualization Manager:
         Value: false
       Name: Current View
       Near Clip Distance: 0.01
-      Scale: 32.0089
+      Scale: 32.773
       Target Frame: dxl_base
       Value: TopDownOrtho (rviz)
-      X: 14.7858
-      Y: 3.55498
+      X: 7.6766
+      Y: 2.5127
     Saved: ~
 Window Geometry:
   Displays:
