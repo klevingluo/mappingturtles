@@ -7,10 +7,10 @@ Panels:
         - /Global Options1
         - /TF1/Frames1
         - /TF1/Tree1
-        - /LaserScan (kinect)1
-        - /LaserScan (kinect)1/Status1
         - /Map1
-        - /Map1/Status1
+        - /Local Planning1/Costmap1
+        - /Local Planning1/Planner1
+        - /Local Planning1/Cost Cloud1
         - /Global Planning1/Costmap1
         - /Global Planning1/Planner1
       Splitter Ratio: 0.5
@@ -64,6 +64,172 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        camera_depth_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_depth_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        camera_rgb_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_rgb_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        caster_back_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        caster_front_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        cliff_sensor_front_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        cliff_sensor_left_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        cliff_sensor_right_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        gyro_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        mount_asus_xtion_pro_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        plate_bottom_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        plate_middle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        plate_top_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_bottom_0_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_bottom_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_bottom_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_bottom_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_bottom_4_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_bottom_5_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_kinect_0_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_kinect_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_middle_0_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_middle_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_middle_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_middle_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_top_0_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_top_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_top_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        pole_top_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_left_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_right_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -129,11 +295,11 @@ Visualization Manager:
           Class: rviz/Map
           Color Scheme: costmap
           Draw Behind: false
-          Enabled: false
+          Enabled: true
           Name: Costmap
-          Topic: /move_base/local_costmap/costmap
+          Topic: /robot_0/move_base/local_costmap/costmap
           Unreliable: false
-          Value: false
+          Value: true
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
@@ -154,7 +320,7 @@ Visualization Manager:
           Radius: 0.03
           Shaft Diameter: 0.1
           Shaft Length: 0.1
-          Topic: /move_base/DWAPlannerROS/local_plan
+          Topic: /robot_0/move_base/NavfnROS/plan
           Unreliable: false
           Value: true
         - Alpha: 0.5
@@ -172,17 +338,17 @@ Visualization Manager:
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 452.7
+          Max Intensity: 3846.93
           Min Color: 0; 0; 0
-          Min Intensity: 0
+          Min Intensity: 97.05
           Name: Cost Cloud
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.04
-          Style: Flat Squares
-          Topic: /move_base/DWAPlannerROS/cost_cloud
+          Style: Points
+          Topic: /robot_0/move_base/DWAPlannerROS/trajectory_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -227,7 +393,7 @@ Visualization Manager:
           Draw Behind: true
           Enabled: true
           Name: Costmap
-          Topic: /move_base/global_costmap/costmap
+          Topic: /robot_0/move_base/global_costmap/costmap
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -267,7 +433,7 @@ Visualization Manager:
       Shaft Length: 1
       Shaft Radius: 0.05
       Shape: Arrow
-      Topic: /move_base/current_goal
+      Topic: /robot_0/move_base/current_goal
       Unreliable: false
       Value: true
     - Arrow Length: 0.2
@@ -298,7 +464,7 @@ Visualization Manager:
       Radius: 0.03
       Shaft Diameter: 0.1
       Shaft Length: 0.1
-      Topic: /move_base/NavfnROS/plan
+      Topic: /robot_0/move_base/NavfnROS/plan
       Unreliable: false
       Value: true
     - Angle Tolerance: 0.1
@@ -339,22 +505,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 9.74556
+      Distance: 14.9917
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.770468
-        Y: 1.35527
-        Z: -1.2855
+        X: -3.68894
+        Y: -0.230419
+        Z: 2.92616
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 1.5048
+      Pitch: 1.4498
       Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 4.90321
+      Yaw: 1.03821
     Saved: ~
 Window Geometry:
   Displays:
@@ -372,5 +538,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1596
-  X: 228
-  Y: 78
+  X: 367
+  Y: 175

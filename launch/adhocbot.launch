@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <launch>
 
+
+  <include file="$(find turtlebot_bringup)/launch/includes/description.launch.xml">
+    <arg name="base"       default="$(optenv TURTLEBOT_BASE kobuki)"/>  <!-- create, rhoomba -->
+    <arg name="stacks"     default="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->
+    <arg name="3d_sensor"  default="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro -->
+  </include>
+
   <param name="use_sim_time" value="true" />
   <arg name="base" default="$(optenv TURTLEBOT_BASE kobuki)" />
   <arg name="3d_sensor" default="$(optenv TURTLEBOT_3D_SENSOR astra)" />
@@ -21,56 +28,71 @@
     <!-- Navigation stack --> 
     <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml" >
       <arg name="odom_frame_id"   value="/$(arg prefix)/odom"/>
-      <arg name="base_frame_id"   value="/$(arg prefix)/base_footprint"/>
-      <arg name="global_frame_id" value="/$(arg prefix)/odom"/>
+      <arg name="base_frame_id"   value="/$(arg prefix)/base_link"/>
+      <arg name="global_frame_id" value="/$(arg prefix)/map"/>
       <arg name="odom_topic"      value="/$(arg prefix)/odom" />
       <arg name="laser_topic"     value="/$(arg prefix)/base_scan" />
     </include>
 
-    <!-- Start karto mapper to generate map from laser scans
     <node name="Mapper" pkg="nav2d_karto" type="mapper">
-      <remap from="base_scan" to ="$(arg prefix)/base_scan" />
-      <remap from="base_laser_link" to="$(arg prefix)/base_laser_link" />
-      <remap from="map" to="$(arg prefix)/map" />
       <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml" />
+      <remap from="$(arg prefix)/map" to="map" />
     </node>
-    -->
 
-    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
-      <param name="base_frame" value="$(arg prefix)/base_footprint"/>
-      <param name="odom_frame" value="$(arg prefix)/odom"/>
-      <param name="map_update_interval" value="5.0"/>
-      <param name="maxUrange" value="6.0"/>
-      <param name="maxRange" value="8.0"/>
-      <param name="sigma" value="0.05"/>
-      <param name="kernelSize" value="1"/>
-      <param name="lstep" value="0.05"/>
-      <param name="astep" value="0.05"/>
-      <param name="iterations" value="5"/>
-      <param name="lsigma" value="0.075"/>
-      <param name="ogain" value="3.0"/>
-      <param name="lskip" value="0"/>
-      <param name="minimumScore" value="200"/>
-      <param name="srr" value="0.01"/>
-      <param name="srt" value="0.02"/>
-      <param name="str" value="0.01"/>
-      <param name="stt" value="0.02"/>
-      <param name="linearUpdate" value="0.5"/>
-      <param name="angularUpdate" value="0.436"/>
-      <param name="temporalUpdate" value="-1.0"/>
-      <param name="resampleThreshold" value="0.5"/>
-      <param name="particles" value="80"/>
-      <param name="xmin" value="-1.0"/>
-      <param name="ymin" value="-1.0"/>
-      <param name="xmax" value="1.0"/>
-      <param name="ymax" value="1.0"/>
+    <node if="$(arg use_sim_time)" pkg="explorer" type="explorer" name="explorer" output="$(arg output)">
+      <!-- costmaps -->
+      <param name="robot_prefix" value="/$(arg prefix)"/>
+      <param name="local_costmap/robot_base_frame" value="$(arg prefix)/base_footprint" />
+      <param name="local_costmap/global_frame" value="$(arg prefix)/odom" />
+      <param name="local_costmap/map_topic" value="map_merger/global_map" />
+      <param name="local_costmap/observation_sources" value="scan" />
+      <param name="local_costmap/scan/topic" value="base_scan" />
+      <param name="local_costmap/scan/data_type" value="LaserScan" />
+      <param name="local_costmap/scan/marking" value="true" />
+      <param name="local_costmap/scan/clearing" value="true" />
+      <param name="local_costmap/base_scan/marking" value="true" />
+      <param name="global_costmap/robot_base_frame" value="$(arg prefix)/base_footprint" />
+      <param name="global_costmap/global_frame" value="$(arg prefix)/map" />
+      <param name="global_costmap/map_topic" value="map_merger/global_map" />
+      <param name="observation_persistence" value="0.1" />
 
-      <param name="delta" value="0.05"/>
-      <param name="llsamplerange" value="0.01"/>
-      <param name="llsamplestep" value="0.01"/>
-      <param name="lasamplerange" value="0.005"/>
-      <param name="lasamplestep" value="0.005"/>
-      <remap from="scan" to="base_scan"/>
+      <!-- simulation parameters -->
+      <param name="log_path" value="$(arg log_path)" />
+      <param name="robot_name" value="$(arg prefix)" />
+
+      <!-- move_base -->
+      <param name="base_link" value="$(arg prefix)/base_link" />
+      <param name="move_base_frame" value="$(arg prefix)/map" />
+
+      <!-- exploration parameters -->
+      <param name="frontier_selection" value="$(arg frontier_selection)" />
+      <rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find explorer)/param/simulation_local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find explorer)/param/simulation_global_costmap_params.yaml" command="load" />
+
+      <remap from="/$(arg prefix)/$(arg prefix)/map" to="/$(arg prefix)/map" />
+    </node>
+
+    <!-- map merging  --> 
+    <node pkg="map_merger" type="map_merger" name="map_merger" output="screen">
+      <param name="log_path" value="sdfu" />
+      <param name="robot_name" value="$(arg prefix)" />
+      <param name="robot_prefix" value="/$(arg prefix)" />
+      <param name="local_map_frame_id" value="$(arg prefix)/map"/>
+      <param name="exchange_position" value="true" />
+      <param name="has_local_map" value="true" />
+      <param name="position_local_robot_topic" value="odom" />
+      <param name="seconds_send_timer" value="8" />
+      <param name="seconds_pub_timer" value="6" />
+      <param name="seconds_recompute_transform" value="25" />
+      <param name="seconds_send_position" value="1" />
+      <param name="position_other_robots_topic" value="position_other_robots"/>       
+      <param name="split_size" value="2048" />
+      <param name="splitted" value="false" />
+      <param name="local_map_topic" value="/$(arg prefix)/map" />
+      <param name="meta_topic_over_network" value="map_meta" />
+      <param name="local_map_metadata_topic" value="/map_metadata" />
     </node>
   </group>
 </launch>
