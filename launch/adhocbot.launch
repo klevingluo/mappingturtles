@@ -107,8 +107,14 @@
       <rosparam file="$(find explorer)/param/simulation_global_costmap_params.yaml" command="load" />
 
       <remap from="/$(arg prefix)/$(arg prefix)/map" to="/$(arg prefix)/map" />
-      <!-- <remap from="/$(arg robot_name)/$(arg robot_name)/base_scan" to="/$(arg robot_name)/base_scan" /> -->
     </node>
+
+    <node 
+      name = "ground_truth_publisher"  
+      pkg  = "mappingturtles" 
+      type = "ground_truth_publisher" 
+      args = "$(arg prefix)"
+      />
 
   </group>
 
