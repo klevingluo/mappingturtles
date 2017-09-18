@@ -1,60 +1,95 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <launch>
-
-
-  <include file="$(find turtlebot_bringup)/launch/includes/description.launch.xml">
-    <arg name="base"       default="$(optenv TURTLEBOT_BASE kobuki)"/>  <!-- create, rhoomba -->
-    <arg name="stacks"     default="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons -->
-    <arg name="3d_sensor"  default="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro -->
-  </include>
-
   <param name="use_sim_time" value="true" />
-  <arg name="base" default="$(optenv TURTLEBOT_BASE kobuki)" />
-  <arg name="3d_sensor" default="$(optenv TURTLEBOT_3D_SENSOR astra)" />
-  <arg name="prefix" default=""/>
+  <arg name="use_sim_time" default="true" />
+  <arg name="prefix"/>
+  <arg name="log_path" default="~/"/>
+  <arg name="output" default="screen"/>
+  <arg name="frontier_selection" default="1"/>
 
   <group ns="$(arg prefix)">
-    <param name="use_sim_time" value="true" />
-
+    <param name="use_sim_time"    value="true" />
     <param name="laser_frame"     value="$(arg prefix)/base_laser_link" />
     <param name="robot_frame"     value="$(arg prefix)/base_link" />
     <param name="odometry_frame"  value="$(arg prefix)/odom" />
     <param name="offset_frame"    value="$(arg prefix)/offset" />
     <param name="map_frame"       value="$(arg prefix)/map" />
     <param name="map_topic"       value="$(arg prefix)/map" />
-    <param name="laser_topic"     value="/robot_0/base_scan" />
+    <param name="laser_topic"     value="/$(arg prefix)/base_scan" />
     <param name="map_service"     value="$(arg prefix)/static_map" />
 
-    <!-- Navigation stack --> 
-    <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml" >
-      <arg name="odom_frame_id"   value="/$(arg prefix)/odom"/>
-      <arg name="base_frame_id"   value="/$(arg prefix)/base_link"/>
-      <arg name="global_frame_id" value="/$(arg prefix)/map"/>
-      <arg name="odom_topic"      value="/$(arg prefix)/odom" />
-      <arg name="laser_topic"     value="/$(arg prefix)/base_scan" />
-    </include>
+    <!-- Navigation stack -->
+    <arg name="odom_frame_id"   default="/$(arg prefix)/odom"/>
+    <arg name="base_frame_id"   default="/$(arg prefix)/base_link"/>
+    <arg name="global_frame_id" default="/$(arg prefix)/map"/>
+    <arg name="odom_topic"      default="/$(arg prefix)/odom" />
+    <arg name="laser_topic"     default="/$(arg prefix)/base_scan" />
 
+    <!-- move base-->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <rosparam file="$(find turtlebot_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find turtlebot_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
+      <rosparam file="$(find turtlebot_navigation)/param/local_costmap_params.yaml" command="load" />   
+      <rosparam file="$(find turtlebot_navigation)/param/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find turtlebot_navigation)/param/dwa_local_planner_params.yaml" command="load" />
+      <rosparam file="$(find turtlebot_navigation)/param/move_base_params.yaml" command="load" />
+      <rosparam file="$(find turtlebot_navigation)/param/global_planner_params.yaml" command="load" />
+      <rosparam file="$(find turtlebot_navigation)/param/navfn_global_planner_params.yaml" command="load" />
+
+      <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+      <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+      <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
+      <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+      <param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
+
+      <remap from="odom" to="$(arg odom_topic)"/>
+      <remap from="scan" to="$(arg laser_topic)"/>
+    </node>
+
+
+    <!-- karto mapping  --> 
     <node name="Mapper" pkg="nav2d_karto" type="mapper">
       <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml" />
       <remap from="$(arg prefix)/map" to="map" />
     </node>
 
+    <!-- map merging  --> 
+    <node pkg="map_merger" type="map_merger" name="map_merger" output="screen">
+      <param name="log_path" value="map_merger_log" />
+      <param name="robot_name" value="$(arg prefix)" />
+      <param name="robot_prefix" value="/$(arg prefix)" />
+      <param name="local_map_frame_id" value="$(arg prefix)/map"/>
+      <param name="exchange_position" value="false" />
+      <param name="has_local_map" value="true" />
+      <param name="position_local_robot_topic" value="odom" />
+      <param name="seconds_send_timer" value="8" />
+      <param name="seconds_pub_timer" value="6" />
+      <param name="seconds_recompute_transform" value="25" />
+      <param name="seconds_send_position" value="1" />
+      <param name="position_other_robots_topic" value="position_other_robots"/>       
+      <param name="split_size" value="2048" />
+      <param name="splitted" value="false" />
+      <param name="local_map_topic" value="/$(arg prefix)/map" />
+      <param name="meta_topic_over_network" value="map_meta" />
+      <param name="local_map_metadata_topic" value="/map_metadata" />
+    </node>
+
+    <!-- explorer --> 
     <node if="$(arg use_sim_time)" pkg="explorer" type="explorer" name="explorer" output="$(arg output)">
-      <!-- costmaps -->
-      <param name="robot_prefix" value="/$(arg prefix)"/>
       <param name="local_costmap/robot_base_frame" value="$(arg prefix)/base_footprint" />
       <param name="local_costmap/global_frame" value="$(arg prefix)/odom" />
+      <param name="robot_prefix" value="$(arg prefix)"/>
+      <param name="global_costmap/robot_base_frame" value="$(arg prefix)/base_footprint" />
+      <param name="global_costmap/global_frame" value="$(arg prefix)/map" />
+      <param name="global_costmap/map_topic" value="map_merger/global_map" />
       <param name="local_costmap/map_topic" value="map_merger/global_map" />
       <param name="local_costmap/observation_sources" value="scan" />
       <param name="local_costmap/scan/topic" value="base_scan" />
       <param name="local_costmap/scan/data_type" value="LaserScan" />
       <param name="local_costmap/scan/marking" value="true" />
       <param name="local_costmap/scan/clearing" value="true" />
-      <param name="local_costmap/base_scan/marking" value="true" />
-      <param name="global_costmap/robot_base_frame" value="$(arg prefix)/base_footprint" />
-      <param name="global_costmap/global_frame" value="$(arg prefix)/map" />
-      <param name="global_costmap/map_topic" value="map_merger/global_map" />
       <param name="observation_persistence" value="0.1" />
+      <param name="local_costmap/base_scan/marking" value="true" />
 
       <!-- simulation parameters -->
       <param name="log_path" value="$(arg log_path)" />
@@ -72,27 +107,9 @@
       <rosparam file="$(find explorer)/param/simulation_global_costmap_params.yaml" command="load" />
 
       <remap from="/$(arg prefix)/$(arg prefix)/map" to="/$(arg prefix)/map" />
+      <!-- <remap from="/$(arg robot_name)/$(arg robot_name)/base_scan" to="/$(arg robot_name)/base_scan" /> -->
     </node>
 
-    <!-- map merging  --> 
-    <node pkg="map_merger" type="map_merger" name="map_merger" output="screen">
-      <param name="log_path" value="sdfu" />
-      <param name="robot_name" value="$(arg prefix)" />
-      <param name="robot_prefix" value="/$(arg prefix)" />
-      <param name="local_map_frame_id" value="$(arg prefix)/map"/>
-      <param name="exchange_position" value="true" />
-      <param name="has_local_map" value="true" />
-      <param name="position_local_robot_topic" value="odom" />
-      <param name="seconds_send_timer" value="8" />
-      <param name="seconds_pub_timer" value="6" />
-      <param name="seconds_recompute_transform" value="25" />
-      <param name="seconds_send_position" value="1" />
-      <param name="position_other_robots_topic" value="position_other_robots"/>       
-      <param name="split_size" value="2048" />
-      <param name="splitted" value="false" />
-      <param name="local_map_topic" value="/$(arg prefix)/map" />
-      <param name="meta_topic_over_network" value="map_meta" />
-      <param name="local_map_metadata_topic" value="/map_metadata" />
-    </node>
   </group>
+
 </launch>

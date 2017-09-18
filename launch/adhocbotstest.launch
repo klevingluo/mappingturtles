@@ -6,19 +6,15 @@
   <include file="$(find mappingturtles)/launch/adhocbot.launch">
     <arg name="prefix" value="robot_0" />
     <arg name="use_sim_time" value="true" />
-    <arg name="output" value="screen" />
-    <arg name="log_path" value="~/" />
-    <arg name="frontier_selection" value=1 />
   </include>
 
   <include file="$(find mappingturtles)/launch/adhocbot.launch">
     <arg name="prefix" value="robot_1" />
     <arg name="use_sim_time" value="true" />
-    <arg name="output" value="screen" />
-    <arg name="log_path" value="~/" />
-    <arg name="frontier_selection" value=1 />
   </include>
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mappingturtles)/rviz/adhov.rviz"/>
+
+  <node name="console" pkg="rqt_console" type="rqt_console" />
 
 </launch>
