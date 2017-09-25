@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<launch>
+  <arg name="prefix"/>
+  <node pkg="rosbag" type="record" name="$(arg prefix)_record"
+    args="-e '/$(arg prefix)/*'" />
+</launch>

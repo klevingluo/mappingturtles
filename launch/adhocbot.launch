@@ -47,12 +47,11 @@
     </node>
 
 
-    <!-- karto mapping
+    <!-- karto mapping -->
     <node name="Mapper" pkg="nav2d_karto" type="mapper" output="screen">
       <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml" />
       <remap from="$(arg prefix)/map" to="map" />
     </node>
-    -->
 
     <!-- gmapping node instead
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">

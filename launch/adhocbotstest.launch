@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <launch>
 
-  <include file="$(find adhoc_communication)/launch/simulation_2.launch"/>
+  <arg name="record" default="false" />
+
+  <include file="$(find mappingturtles)/launch/simulate5.launch">
+    <arg name="world" value="five-world" />
+  </include>
 
   <include file="$(find mappingturtles)/launch/adhocbot.launch">
     <arg name="prefix" value="robot_0" />
@@ -13,8 +17,15 @@
     <arg name="use_sim_time" value="true" />
   </include>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mappingturtles)/rviz/adhov.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mappingturtles)/rviz/adhov.rviz" />
 
   <node name="console" pkg="rqt_console" type="rqt_console" />
+  <!-- for recording -->
+
+  <include 
+    if="$(arg record)"
+    file="$(find mappingturtles)/launch/record_sim.launch">
+    <arg name="prefix" value="robot_0"/>
+  </include>
 
 </launch>
