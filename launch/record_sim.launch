@@ -2,5 +2,6 @@
 <launch>
   <arg name="prefix"/>
   <node pkg="rosbag" type="record" name="$(arg prefix)_record"
-    args="-e '/$(arg prefix)/*'" />
+    args="/$(arg prefix)/map /$(arg prefix)/odom /$(arg prefix)/map_merger/global_map /$(arg prefix)/goalPoint /$(arg prefix)/move_base/NavfnROS/plan
+    " />
 </launch>

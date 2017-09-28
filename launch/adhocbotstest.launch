@@ -2,6 +2,7 @@
 <launch>
 
   <arg name="record" default="false" />
+  <arg name="visualize" default="false" />
 
   <include file="$(find mappingturtles)/launch/simulate5.launch">
     <arg name="world" value="five-world" />
@@ -17,9 +18,18 @@
     <arg name="use_sim_time" value="true" />
   </include>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mappingturtles)/rviz/adhov.rviz" />
+  <node 
+    if="$(arg visualize)"
+    name="rviz" 
+    pkg="rviz" 
+    type="rviz" 
+    args="-d $(find mappingturtles)/rviz/adhov.rviz"/>
 
-  <node name="console" pkg="rqt_console" type="rqt_console" />
+  <node 
+    if="$(arg visualize)"
+    name="console" 
+    pkg="rqt_console" 
+    type="rqt_console" />
   <!-- for recording -->
 
   <include 
