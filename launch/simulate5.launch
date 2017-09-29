@@ -12,7 +12,7 @@
 <arg name="enable_cooperative_relaying" default="true"/>
 <arg name="world" default="two_world"/>
 
-<node pkg="stage_ros" type="stageros" name="simulation" args="$(find mappingturtles)/world/$(arg world).world" />
+<node pkg="stage_ros" type="stageros" name="simulation" args="-g $(find mappingturtles)/world/$(arg world).world" />
 
 <node pkg="adhoc_communication" type="adhoc_communication" name="robot_0" >
 
