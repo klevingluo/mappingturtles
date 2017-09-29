@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<launch>
+
+  <arg name="bag"/>
+
+  <node 
+    name="rviz" 
+    pkg="rviz" 
+    type="rviz" 
+    args="-d $(find mappingturtles)/rviz/adhov.rviz"/>
+
+  <node pkg="rosbag" type="play" name="simulation" args="--clock $(arg bag)" output="screen"/>
+</launch>
