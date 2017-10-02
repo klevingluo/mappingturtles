@@ -1,5 +1,5 @@
 name two-world
-interval_sim 300   # simulation timestep in milliseconds
+interval_sim 100   # simulation timestep in milliseconds
 quit_time 99999999 # stop simulating after this time
 resolution 0.02    # resolution of the underlying raytrace model in meters
 
