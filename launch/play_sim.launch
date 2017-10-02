@@ -9,5 +9,9 @@
     type="rviz" 
     args="-d $(find mappingturtles)/rviz/adhov.rviz"/>
 
-  <node pkg="rosbag" type="play" name="simulation" args="--clock $(arg bag)" output="screen"/>
+  <node pkg="rosbag" 
+    type="play" 
+    name="simulation" 
+    args="--clock -r 5 $(arg bag)" 
+    output="screen"/>
 </launch>

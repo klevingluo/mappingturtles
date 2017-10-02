@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <launch>
   <arg name="prefix"/>
-  <node pkg="rosbag" type="record" name="$(arg prefix)_record"
-    args= -a/>
+  <node pkg="rosbag" type="record" name="$(arg prefix)_record" args="-a"/>
   <!-- "/clock /tf /$(arg prefix)/map /$(arg prefix)/odom /$(arg prefix)/map_merger/global_map /$(arg prefix)/goalPoint /$(arg prefix)/move_base/NavfnROS/plan"-->
 </launch>

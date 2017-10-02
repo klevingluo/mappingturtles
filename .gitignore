@@ -1,7 +1,8 @@
 # backup files left over from vim 
-**.swp 
-*.swp 
-.swp
+**.swp
+**.swo
+*.swp
+*.swo
 
 # undo files
 **un~
