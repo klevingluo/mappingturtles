@@ -11,8 +11,12 @@
 <arg name="num_e2e_retrans" default="3"/>
 <arg name="enable_cooperative_relaying" default="true"/>
 <arg name="world" default="two_world"/>
+<arg name="visualize" default="false"/>
 
-<node pkg="stage_ros" type="stageros" name="simulation" args="-g $(find mappingturtles)/world/$(arg world).world" />
+<!-- launch stage ros headless if no visualization-->
+<node if="$(arg visualize)" pkg="stage_ros" type="stageros" name="simulation" args="$(find mappingturtles)/world/$(arg world).world" />
+
+<node unless="$(arg visualize)" pkg="stage_ros" type="stageros" name="simulation" args="-g $(find mappingturtles)/world/$(arg world).world" />
 
 <node pkg="adhoc_communication" type="adhoc_communication" name="robot_0" >
 

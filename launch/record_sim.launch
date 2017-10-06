@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <launch>
   <arg name="prefix"/>
-  <node pkg="rosbag" type="record" name="$(arg prefix)_record" args="-a"/>
+  <node pkg="rosbag" type="record" name="$(arg prefix)_record" args=" /robot_0/map_merger/global_map_updates /robot_1/odom /robot_0/goalPoint/goalPoint /robot_1/move_base/NavfnROS/plan /robot_0/move_base/NavfnROS/plan /robot_1/map_updates /robot_1/map_merger/global_map /tf /robot_0/odom /tf_static /robot_0/map_updates /robot_1/goalPoint/goalPoint /robot_1/map_merger/global_map_updates /robot_1/map /robot_0/map /robot_0/map_merger/global_map /clock"/>
   <!-- "/clock /tf /$(arg prefix)/map /$(arg prefix)/odom /$(arg prefix)/map_merger/global_map /$(arg prefix)/goalPoint /$(arg prefix)/move_base/NavfnROS/plan"-->
 </launch>

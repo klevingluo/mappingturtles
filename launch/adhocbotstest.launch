@@ -5,6 +5,7 @@
 
   <include file="$(find mappingturtles)/launch/simulate5.launch">
     <arg name="world" value="five-world" />
+    <arg name="visualize" value="$(arg visualize)" />
   </include>
 
   <include file="$(find mappingturtles)/launch/adhocbot.launch">
@@ -29,8 +30,8 @@
     name="console" 
     pkg="rqt_console" 
     type="rqt_console" />
-  <!-- for recording -->
 
+  <!-- for recording -->
   <include 
     if="$(arg record)"
     file="$(find mappingturtles)/launch/record_sim.launch">

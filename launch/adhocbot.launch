@@ -5,6 +5,7 @@
   <arg name="prefix"/>
   <arg name="log_path" default="~/"/>
   <arg name="output" default="screen"/>
+  <!-- 1 is the one that uses coordination, 0 is the greedy strategy-->
   <arg name="frontier_selection" default="1"/>
 
   <group ns="$(arg prefix)">
@@ -26,30 +27,56 @@
     <arg name="laser_topic"     default="/$(arg prefix)/base_scan" />
 
     <!-- move base-->
-    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-      <rosparam file="$(find turtlebot_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
-      <rosparam file="$(find turtlebot_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
-      <rosparam file="$(find turtlebot_navigation)/param/local_costmap_params.yaml" command="load" />   
-      <rosparam file="$(find turtlebot_navigation)/param/global_costmap_params.yaml" command="load" />
-      <rosparam file="$(find turtlebot_navigation)/param/dwa_local_planner_params.yaml" command="load" />
-      <rosparam file="$(find turtlebot_navigation)/param/move_base_params.yaml" command="load" />
-      <rosparam file="$(find turtlebot_navigation)/param/global_planner_params.yaml" command="load" />
-      <rosparam file="$(find turtlebot_navigation)/param/navfn_global_planner_params.yaml" command="load" />
+    <node 
+      pkg="move_base" 
+      type="move_base" 
+      respawn="false" 
+      name="move_base" 
+      output="screen">
 
-      <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
-      <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
-      <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
-      <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
-      <param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
+      <rosparam 
+        file="$(find turtlebot_navigation)/param/costmap_common_params.yaml" 
+        command="load" ns="global_costmap" />
+      <rosparam 
+        file="$(find turtlebot_navigation)/param/costmap_common_params.yaml" 
+        command="load" ns="local_costmap" />   
+      <rosparam 
+        file="$(find turtlebot_navigation)/param/local_costmap_params.yaml" 
+        command="load" />   
+      <rosparam 
+        file="$(find turtlebot_navigation)/param/global_costmap_params.yaml" 
+        command="load" />
+      <rosparam 
+        file="$(find turtlebot_navigation)/param/dwa_local_planner_params.yaml" 
+        command="load" />
+
+      <rosparam 
+        file="$(find mappingturtles)/param/move_base_params.yaml" 
+        command="load" />
+
+      <param 
+        name="global_costmap/global_frame" 
+        value="$(arg global_frame_id)"/>
+      <param 
+        name="global_costmap/robot_base_frame" 
+        value="$(arg base_frame_id)"/>
+      <param 
+        name="local_costmap/global_frame" 
+        value="$(arg odom_frame_id)"/>
+      <param 
+        name="local_costmap/robot_base_frame" 
+        value="$(arg base_frame_id)"/>
+      <param 
+        name="DWAPlannerROS/global_frame_id" 
+        value="$(arg odom_frame_id)"/>
 
       <remap from="odom" to="$(arg odom_topic)"/>
       <remap from="scan" to="$(arg laser_topic)"/>
     </node>
 
-
     <!-- karto mapping -->
     <node name="Mapper" pkg="nav2d_karto" type="mapper" output="screen">
-      <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml" />
+      <rosparam file="$(find mappingturtles)/param/karto_mapper.yaml" />
       <remap from="$(arg prefix)/map" to="map" />
     </node>
 
@@ -103,9 +130,9 @@
     <param name="exchange_position" value="true" />
     <param name="has_local_map" value="true" />
     <param name="position_local_robot_topic" value="odom" />
-    <param name="seconds_send_timer" value="8" />
-    <param name="seconds_pub_timer" value="6" />
-    <param name="seconds_recompute_transform" value="10" />
+    <param name="seconds_send_timer" value="30" />
+    <param name="seconds_pub_timer" value="30" />
+    <param name="seconds_recompute_transform" value="30" />
     <param name="max_rotation_robots" value="-1" />
     <param name="seconds_send_position" value="1" />
     <param name="position_other_robots_topic" value="position_other_robots"/>       
@@ -142,6 +169,10 @@
 
     <!-- exploration parameters -->
     <param name="frontier_selection" value="$(arg frontier_selection)" />
+
+    <!-- number of clusters that are unreachable for the whole cluster to be considered unreachable -->
+    <param name="number_unreachable_frontiers_for_cluster" value="6" /> 
+
     <rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find explorer)/param/simulation_local_costmap_params.yaml" command="load" />
