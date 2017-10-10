@@ -34,11 +34,19 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+find_package(OpenCV 2.4.8 REQUIRED)
+
 ## Declare a C++ executable
 # ground truth publisher
 add_executable(ground_truth_publisher src/ground_truth_publisher.cpp)
+add_executable(metrics src/metrics.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(ground_truth_publisher
    ${catkin_LIBRARIES}
+)
+
+target_link_libraries(metrics
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
 )

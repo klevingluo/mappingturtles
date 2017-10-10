@@ -191,6 +191,14 @@
     args = "$(arg prefix)"
     />
 
+  <node 
+    if   = "$(arg use_sim_time)"
+    name = "metrics"  
+    pkg  = "mappingturtles" 
+    type = "metrics" 
+    args = "$(arg prefix)"
+    />
+
 </group>
 
 </launch>

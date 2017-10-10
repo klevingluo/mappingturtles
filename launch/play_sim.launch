@@ -2,6 +2,7 @@
 <launch>
 
   <arg name="bag"/>
+  <arg name="speed" default="50"/>
 
   <node 
     name="rviz" 
@@ -12,6 +13,6 @@
   <node pkg="rosbag" 
     type="play" 
     name="simulation" 
-    args="--clock -r 5 $(arg bag)" 
+    args="--clock -r $(arg speed) $(arg bag)" 
     output="screen"/>
 </launch>
