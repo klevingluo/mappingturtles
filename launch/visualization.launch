@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<launch>
+
+  <node 
+    name="rviz" 
+    pkg="rviz" 
+    type="rviz" 
+    args="-d $(find mappingturtles)/rviz/adhov.rviz"/>
+
+  <node 
+    name="console" 
+    pkg="rqt_console" 
+    type="rqt_console" />
+
+</launch>

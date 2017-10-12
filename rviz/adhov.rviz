@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /robot_11
+        - /robot_11/Map1
         - /robot_01
       Splitter Ratio: 0.5
     Tree Height: 672
@@ -93,7 +93,7 @@ Visualization Manager:
           Value: true
         - Alpha: 0.7
           Class: rviz/Map
-          Color Scheme: map
+          Color Scheme: costmap
           Draw Behind: false
           Enabled: true
           Name: Merged Maps
@@ -204,7 +204,7 @@ Visualization Manager:
           Value: true
         - Alpha: 0.7
           Class: rviz/Map
-          Color Scheme: map
+          Color Scheme: costmap
           Draw Behind: false
           Enabled: true
           Name: Merged Map
@@ -258,16 +258,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 60.6238
+      Distance: 61.9186
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 25.6297
-        Y: -22.8924
-        Z: -28.2814
+        X: -4.36534
+        Y: -2.7249
+        Z: -28.304
       Name: Current View
       Near Clip Distance: 0.01
       Pitch: 1.5698
@@ -291,5 +291,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1685
-  X: 30
-  Y: 20
+  X: 3
+  Y: 19

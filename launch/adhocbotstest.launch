@@ -2,9 +2,10 @@
 <launch>
   <arg name="record" default="false" />
   <arg name="visualize" default="false" />
+  <arg name="world" default="five-world"/>
 
-  <include file="$(find mappingturtles)/launch/simulate5.launch">
-    <arg name="world" value="five-world" />
+  <include file="$(find mappingturtles)/launch/adhoc_simulator.launch">
+    <arg name="world" value="$(arg world)" />
     <arg name="visualize" value="$(arg visualize)" />
   </include>
 
@@ -18,18 +19,9 @@
     <arg name="use_sim_time" value="true" />
   </include>
 
-  <node 
+  <include 
     if="$(arg visualize)"
-    name="rviz" 
-    pkg="rviz" 
-    type="rviz" 
-    args="-d $(find mappingturtles)/rviz/adhov.rviz"/>
-
-  <node 
-    if="$(arg visualize)"
-    name="console" 
-    pkg="rqt_console" 
-    type="rqt_console" />
+    file="$(find mappingturtles)/launch/visualization.launch"/>
 
   <!-- for recording -->
   <include 
@@ -37,5 +29,6 @@
     file="$(find mappingturtles)/launch/record_sim.launch">
     <arg name="prefix" value="robot_0"/>
   </include>
+
 
 </launch>
