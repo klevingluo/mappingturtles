@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /robot_11
         - /robot_11/Map1
         - /robot_01
       Splitter Ratio: 0.5
@@ -273,7 +274,7 @@ Visualization Manager:
       Pitch: 1.5698
       Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 1.65138
+      Yaw: 1.65638
     Saved: ~
 Window Geometry:
   Displays:
@@ -291,5 +292,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1685
-  X: 3
+  X: -6
   Y: 19

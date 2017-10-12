@@ -8,6 +8,7 @@
   <include file="$(find mappingturtles)/launch/adhoc_simulator.launch">
     <arg name="world" value="$(arg world)" />
     <arg name="visualize" value="$(arg visualize)" />
+    <arg name="robot_0" value="true"/>
   </include>
 
   <include file="$(find mappingturtles)/launch/adhocbot.launch">
