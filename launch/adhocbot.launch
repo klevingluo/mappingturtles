@@ -182,8 +182,6 @@
     <remap from="/$(arg prefix)/$(arg prefix)/map" to="/$(arg prefix)/map" />
   </node>
 
-
-
   <node 
     if   = "$(arg use_sim_time)"
     name = "ground_truth_publisher"  
