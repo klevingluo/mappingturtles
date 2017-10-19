@@ -1,53 +1,13 @@
-define block model
-(
- size [0.500 0.500 0.500]
- gui_nose 0
- )
+include "sim-turtlebot.inc"
+include "floorplan.inc"
 
-define topurg ranger (
- sensor( 			
-   range [ 0.0  30.0 ]
-   fov 270.25
-   samples 1081
-   )
-
-# generic model properties
- watts 2.0
- color_rgba [ 0 1 0 0.15 ]
- )
-
-define erratic position
-(
-#size [0.415 0.392 0.25]
- size [0.350 0.350 0.250]
- origin [-0.050 0.000 0.000 0.000]
- gui_nose 1
- drive "diff"
- topurg(pose [ 0.050 0.000 0.000 0.000 ])
- )
-
-define floorplan model
-(
-# sombre, sensible, artistic
- color "gray30"
-
-# most maps will need a bounding box
- boundary 1
-
- gui_nose 0
- gui_grid 0
-
- gui_outline 0
- gripper_return 0
- fiducial_return 0
- laser_return 1
- )
-
-# set the resolution of the underlying raytrace model in meters
-resolution 0.02
-
-interval_sim 100  # simulation timestep in milliseconds
-
+name                    "five robots split up in the map"
+interval_sim            100     # simulation timestep in milliseconds
+quit_time               9999999 # stop simulating after this time
+resolution              0.02    # resolution of the underlying raytrace model in meters
+quit_time               0
+show_clock              0
+show_clock_interval     100
 
 window
 ( 

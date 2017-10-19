@@ -12,13 +12,13 @@ void groundTruthCallback(const nav_msgs::OdometryPtr& msg){
   if (!saved) {
     init_pos.setOrigin(
         tf::Vector3(- msg->pose.pose.position.x, 
-                    - msg->pose.pose.position.y,
-                    msg->pose.pose.position.z));
+          - msg->pose.pose.position.y,
+          msg->pose.pose.position.z));
 
     tf::Quaternion q;
     q.setRPY(0, 
-             0, 
-             msg->pose.pose.orientation.w);
+        0, 
+        msg->pose.pose.orientation.w);
 
     init_pos.setRotation(q);
 
@@ -27,9 +27,21 @@ void groundTruthCallback(const nav_msgs::OdometryPtr& msg){
 
   br.sendTransform(
       tf::StampedTransform(init_pos, 
-                           ros::Time::now(), 
-                           "world", 
-                           turtle_name + "/map"));
+        ros::Time::now(), 
+        "world", 
+        turtle_name + "/map"));
+
+  tf::Transform empty;
+  empty.setOrigin(tf::Vector3(0,0,0));
+  tf::Quaternion q;
+  q.setRPY(0,0,0);
+  empty.setRotation(q);
+
+  br.sendTransform(
+      tf::StampedTransform(init_pos, 
+        ros::Time::now(), 
+        "world",
+        turtle_name));
 }
 
 int main(int argc, char** argv) {
@@ -41,13 +53,13 @@ int main(int argc, char** argv) {
   };
 
   turtle_name = argv[1];
-  
+
   ros::NodeHandle node;
   ros::Subscriber sub = node.subscribe(
       "base_pose_ground_truth", 
       10, 
       &groundTruthCallback);
-  
+
   ros::spin();
   return 0;
 

@@ -182,6 +182,19 @@
     <remap from="/$(arg prefix)/$(arg prefix)/map" to="/$(arg prefix)/map" />
   </node>
 
+  <!-- other robot localization
+  <node pkg="amcl" type="amcl" name="other_robot_localizer">
+    <param name="use_sim_time" value="true" />
+    <param name="use_map_topic" value="true"/>
+    <param name="odom_frame_id" value="/$(arg prefix)/odom"/>
+    <param name="base_frame_id" value="/$(arg prefix)/base_laser_link"/>
+    <param name="global_frame_id" value="hype_world"/>
+    
+    <remap from="scan" to="base_scan"/>
+    <remap from="map" to="map_merger/other_robot_map"/>
+  </node>
+  -->
+
   <node 
     if   = "$(arg use_sim_time)"
     name = "ground_truth_publisher"  
