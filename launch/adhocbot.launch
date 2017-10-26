@@ -49,7 +49,6 @@
       <rosparam 
         file="$(find mappingturtles)/param/dwa_local_planner_params.yaml" 
         command="load" />
-
       <rosparam 
         file="$(find mappingturtles)/param/move_base_params.yaml" 
         command="load" />
@@ -144,10 +143,10 @@
   </node>
 
   <!-- explorer --> 
-  <node if="$(arg use_sim_time)" pkg="explorer" type="explorer" name="explorer" output="$(arg output)">
+  <node if="$(arg use_sim_time)" pkg="explorer" type="explorer" name="explorer" output="$(arg output)" launch-prefix="gdb -ex run --args">
     <param name="local_costmap/robot_base_frame" value="$(arg prefix)/base_footprint" />
     <param name="local_costmap/global_frame" value="$(arg prefix)/odom" />
-    <param name="robot_prefix" value="$(arg prefix)"/>
+    <param name="robot_prefix" value="/$(arg prefix)/"/>
     <param name="global_costmap/robot_base_frame" value="$(arg prefix)/base_footprint"/>
     <param name="global_costmap/global_frame" value="$(arg prefix)/map" />
     <!--map_merger/global_map-->

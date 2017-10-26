@@ -15,8 +15,8 @@ define topurg ranger
 define erratic position 
 (
   # cheating to get rid of collisions in simulation
-  size [0.1 0.1 0.1]
-  # size [0.350 0.350 0.250]
+  # size [0.1 0.1 0.1]
+  size [0.350 0.350 0.250]
   origin [-0.050 0.000 0.000 0.000]
   gui_nose 1
   drive "diff"
