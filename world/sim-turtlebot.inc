@@ -8,6 +8,12 @@ define topurg ranger
   )
 
   # generic model properties
+  boundary 1
+  gui_nose 0
+  gui_grid 0
+  gui_outline 0
+  laser_return 1
+  ranger_return 1
   color "black"
   size [ 0.050 0.050 0.100 ]
 )
@@ -20,7 +26,12 @@ define erratic position
   origin [-0.050 0.000 0.000 0.000]
   gui_nose 1
   drive "diff"
-  topurg(pose [ 0.050 0.000 0.000 0.000 ])
+  topurg(pose [ 0.000 0.000 0.000 0.000 ])
+
+  boundary 1
+  gui_outline 0
+  laser_return 1
+  ranger_return 1
 
 	# Estimated mass in KG
 	mass 40.0 

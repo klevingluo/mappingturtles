@@ -13,22 +13,22 @@ window
 ( 
   size [ 745 448 ] 
 
-  rotate [ 0.000 0.440 ]
-  scale 61.748 
+  rotate [ 12.500 -78.060 ]
+  scale 28.807 
 )
 
 # load an environment bitmap
 floorplan 
 ( 
-  name "home"
-  bitmap "home.pgm"
+  name "map"
+  bitmap "loop.pgm"
   size [24.000 24.000 0.500]
-  pose [ 0.000 0.000 0.000 90.000 ]
+  # pose [ 0.000 0.000 0.000 90.000 ]
 )
 
 # throw in a robot
-erratic( pose [ -5.277 3.266 0.000 -126.875 ] name "robot_0" color "red")
-erratic( pose [ -4.050 3.972 0.000 -70.267 ] name "robot_1" color "yellow")
-# erratic( pose [ -21 -10 0.000 180.000 ] name "robot_2" color "blue")
-# erratic( pose [ -6 -9 0.000 180.000 ] name "robot_3" color "green")
-# erratic( pose [ 0.2 1.6 0.000 180.000 ] name "robot_4" color "pink")
+erratic( pose [ -11.162 10.521 0.000 -126.875 ] name "robot_0" color "red")
+erratic( pose [ -10.407 9.552 0.000 -70.267 ] name "robot_1" color "yellow")
+erratic( pose [ 10.259 10.093 0.000 180.000 ] name "robot_2" color "blue")
+erratic( pose [ 9.961 -10.059 0.000 180.000 ] name "robot_3" color "green")
+erratic( pose [ 8.867 10.346 0.000 180.000 ] name "robot_4" color "pink")
