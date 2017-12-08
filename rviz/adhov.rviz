@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /robot_11
         - /robot_01
+        - /robot_01/Odometry1
       Splitter Ratio: 0.661098
     Tree Height: 668
   - Class: rviz/Selection
@@ -60,7 +61,7 @@ Visualization Manager:
           Marker Topic: /robot_1/frontierPoints
           Name: MarkerArray
           Namespaces:
-            marker: true
+            {}
           Queue Size: 100
           Value: true
         - Angle Tolerance: 0.1
@@ -116,7 +117,7 @@ Visualization Manager:
           Topic: /robot_1/goalPoint/goalPoint
           Unreliable: false
           Value: true
-      Enabled: true
+      Enabled: false
       Name: robot_1
     - Class: rviz/Group
       Displays:
@@ -143,17 +144,9 @@ Visualization Manager:
           Topic: /robot_0/move_base/NavfnROS/plan
           Unreliable: false
           Value: true
-        - Class: rviz/MarkerArray
-          Enabled: true
-          Marker Topic: /robot_0/frontierPoints
-          Name: MarkerArray
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
         - Angle Tolerance: 0.1
           Class: rviz/Odometry
-          Color: 255; 0; 0
+          Color: 0; 255; 0
           Enabled: true
           Keep: 1
           Length: 0.4
@@ -189,7 +182,30 @@ Visualization Manager:
           Topic: /robot_0/goalPoint/goalPoint
           Unreliable: false
           Value: true
-      Enabled: false
+        - Alpha: 1
+          Axes Length: 1
+          Axes Radius: 0.1
+          Class: rviz/Pose
+          Color: 255; 25; 0
+          Enabled: true
+          Head Length: 0.3
+          Head Radius: 0.1
+          Name: Pose
+          Shaft Length: 1
+          Shaft Radius: 0.05
+          Shape: Arrow
+          Topic: /robot_0/move_base/current_goal
+          Unreliable: false
+          Value: true
+        - Arrow Length: 0.3
+          Class: rviz/PoseArray
+          Color: 255; 25; 0
+          Enabled: true
+          Name: PoseArray
+          Topic: /robot_0/frontiers
+          Unreliable: false
+          Value: true
+      Enabled: true
       Name: robot_0
   Enabled: true
   Global Options:
@@ -211,22 +227,22 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 176.316
+      Distance: 181.189
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -1.57771
-        Y: 3.21961
-        Z: -140.294
+        X: -1.23
+        Y: 4.2418
+        Z: -140.306
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 1.5448
+      Pitch: 1.5348
       Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 5.34956
+      Yaw: 5.35456
     Saved:
       - Class: rviz/Orbit
         Distance: 169.468
@@ -261,5 +277,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1502
-  X: -9
-  Y: 19
+  X: 260
+  Y: 89

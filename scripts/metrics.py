@@ -1,98 +1,101 @@
 #!/usr/bin/env python
 
-import rospy
-import cv2
 import tf
-import json
+import rospy
 import numpy as np
-import matplotlib.pyplot as plt
-from nav_msgs.msg import OccupancyGrid
+import math
+import json
+import cv2
 from std_msgs.msg import String
+from rosgraph_msgs.msg import Clock
+from nav_msgs.msg import OccupancyGrid
+from geometry_msgs.msg import Twist
 
 class Metrics:
     """ a class for measuring the exploration progress """
+
     def __init__(self):
         self.data = []
+        self.timer = 0
+        self.last_logged = 0
+        self.interval = 10
+        self.travelled = 0
+        self.rotated = 0
+        self.mapped_area = 0
 
     def GridCallback(self, data):
-        local_map = self.OccupancyGridToMat(data)
-        home = cv2.imread("../world/home.pgm", 0)
-    
-        listener = tf.TransformListener()
-        rospy.sleep(0.5)
-        position, quat = listener.lookupTransform("world", "robot_0/map", rospy.Time(0)) 
-        euler = tf.transformations.euler_from_quaternion(quat)
-        yaw = euler[2]
-    
-        local_map = cv2.copyMakeBorder(
-                local_map, 
-                0, 
-                home.shape[1] - local_map.shape[1], 
-                0, 
-                home.shape[0] - local_map.shape[0], 
-                cv2.BORDER_CONSTANT)
-    
-        rows,cols = local_map.shape
-        # rotation is given by the rotation parameter in the world
-        M = cv2.getRotationMatrix2D((cols/2,rows/2),-126.875,1)
-        local_map = cv2.warpAffine(local_map,M,(cols,rows))
-        # 20 is te resolution, 24 is the size of the map
-        local_map = cv2.resize(
-                local_map,
-                (local_map.shape[0]/20*home.shape[0]/24, 
-                    local_map.shape[1]/20*home.shape[1]/24))
-    
-    
-        center = [[data.info.origin.position.x], [data.info.origin.position.y], [0]]
-        center = np.dot(M,center)
-        print center
-    
-        centerx = local_map.shape[0]/2  
-        centery = local_map.shape[1]/2 
-        local_map = local_map[
-                centerx - home.shape[0]/2:centerx+home.shape[0]/2+1, 
-                centery - home.shape[1]/2:centery+home.shape[1]/2+1]
-    
-        test = home / 2 + local_map / 2;
-        now = rospy.Time.now()
-        cv2.imshow('test', test)
-        cv2.waitKey(0)
+        mapped_area = 0
+        for i in range(0, len(data.data)):
+            if(data.data[i] != -1 and data.data[i] < 50):
+                mapped_area += 1
+        self.mapped_area = mapped_area
 
-    """ calulates the area mapped """
-    def CalculateMappedArea(self, Occ):
-        mapped_area = 0;
-        for i in range(0, len(Occ.data)):
-            if(Occ.data[i] != -1 and Occ.data[i] < 50):
-                mapped_area = mapped_area + 1
-        return mapped_area
-
-    def CalulateExplorationCost(self):
-        return 0;
-
-    def CalulateMapQuality(self):
-        return 0;
-
-    def CalulateExplorationTime(self):
-        return 0;
-
-    def CalulateEfficiency(self):
-        return 0;
-
-    def CalulateMapCompleteness(self):
-        return 0;
+        # local_map = self.OccupancyGridToMat(data)
+        # home = cv2.imread("../world/home.pgm", 0)
     
-    def WriteEntry(self):
+        # listener = tf.TransformListener()
+        # rospy.sleep(0.5)
+        # position, quat = listener.lookupTransform("world", self.robotname + "/map", rospy.Time(0)) 
+        # euler = tf.transformations.euler_from_quaternion(quat)
+    
+        # rows,cols = local_map.shape
+        # # rotation is given by the rotation parameter in the world
+        # res = data.info.resolution
+        # center = [
+        #         [int(-data.info.origin.position.x/res)], 
+        #         [int(-data.info.origin.position.y/res)], 
+        #         [0]]
+        # M = cv2.getRotationMatrix2D((center[0][0],center[1][0]),0,1)
+        # local_map = cv2.warpAffine(local_map,M,(cols,rows))
+        # # 20 is the resolution, 24 is the size of the map
+        # local_map = cv2.resize(
+        #         local_map,
+        #         (int(local_map.shape[0]*res*home.shape[0]/24), 
+        #          int(local_map.shape[1]*res*home.shape[1]/24)))
+    
+    
+        # center = [[-data.info.origin.position.x/res], [-data.info.origin.position.y/res], [0]]
+        # # transforming the center with the matrix
+        # center = np.dot(M,center)
+    
+        # centerx = -data.info.origin.position.x*res*24
+        # centery = -data.info.origin.position.y*res*24
+
+        # centerx = local_map.shape[0]/2 + 155
+        # centery = local_map.shape[1]/2 - 90
+        # local_map = local_map[
+        #         centerx - home.shape[0]/2:centerx+home.shape[0]/2+1, 
+        #         centery - home.shape[1]/2:centery+home.shape[1]/2+1]
+    
+        # test = home / 2 + local_map / 2;
+        # now = rospy.Time.now()
+
+    def CmdCallback(self, data):
+        """ the dwa naviagtor only rotates and moves forward """
+        self.travelled += math.fabs(data.linear.x)
+        self.rotated += math.fabs(data.angular.z)
+
+    def ClockCallback(self, data):
+        secs = data.clock.secs
+        if secs - self.last_logged  < 10:
+            return
+        self.last_logged = secs
         entry = {
-                'timestamp': str(now),
-                'quality': self.CalulateMapQuality(),
-                'efficiency': self.CalulateEfficiency(),
-                'completeness': self.CalulateMapCompleteness(),
-                'area': self.CalculateMappedArea(),
-                'cost': self.CalulateExplorationCost(),
-        }
+                'time': secs,
+                'cost': self.travelled,
+                'quality': self.CalculateMapQuality(),
+                'area': self.mapped_area,
+                'completeness': self.CalculateMapCompleteness(),
+                }
         self.data['data'].append(entry)
-        with open('data.json', 'w') as outfile:
+        with open(self.robotname + 'data.json', 'w') as outfile:
             json.dump(self.data, outfile)
+
+    def CalculateMapQuality(self):
+        return 0;
+
+    def CalculateMapCompleteness(self):
+        return 0;
 
     def OccupancyGridToMat(self, Occ):
         width = Occ.info.width
@@ -110,6 +113,8 @@ class Metrics:
     def runNode(self):
         rospy.init_node('metrics', anonymous=False)
 
+        self.robotname = rospy.get_param("prefix")
+
         self.data = {
           'date': 2017,
           'experiment': 2017,
@@ -117,8 +122,9 @@ class Metrics:
           'data': []
         }
     
-        # prefix = rospy.get_param("prefix")
-        rospy.Subscriber("robot_0/map", OccupancyGrid, self.GridCallback)
+        rospy.Subscriber("map", OccupancyGrid, self.GridCallback)
+        rospy.Subscriber("cmd_vel", Twist, self.CmdCallback)
+        rospy.Subscriber("/clock", Clock, self.ClockCallback)
     
         rate = rospy.Rate(0.2) #hz
     

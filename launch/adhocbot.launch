@@ -125,59 +125,15 @@
       <param name="world_frame" value="$(arg prefix)/map"/>
     </node>
 
-    <!-- explorer --> 
-    <node pkg="explorer" type="explorer" name="explorer" output="screen">
-      <param name="local_costmap/robot_base_frame" value="$(arg prefix)/base_footprint" />
-      <param name="local_costmap/global_frame" value="$(arg prefix)/odom" />
-      <param name="robot_prefix" value="/$(arg prefix)/"/>
-      <param name="global_costmap/robot_base_frame" value="$(arg prefix)/base_footprint"/>
-      <param name="global_costmap/global_frame" value="$(arg prefix)/map" />
-
-      <!--map_merger/global_map-->
-      <param name="local_costmap/map_topic" value="map" />
-      <param name="local_costmap/observation_sources" value="scan" />
-      <param name="local_costmap/scan/topic" value="base_scan" />
-      <param name="local_costmap/scan/data_type" value="LaserScan" />
-      <param name="local_costmap/scan/marking" value="true" />
-      <param name="local_costmap/scan/clearing" value="true" />
-      <param name="observation_persistence" value="0.1" />
-      <param name="local_costmap/base_scan/marking" value="true" />
-
-      <!-- simulation parameters -->
-      <param name="log_path" value="$(arg log_path)" />
-      <param name="robot_name" value="$(arg prefix)" />
-
-      <!-- move_base -->
-      <param name="base_link" value="$(arg prefix)/base_link" />
-      <param name="move_base_frame" value="$(arg prefix)/map" />
-
-      <!-- exploration parameters -->
-      <param name="frontier_selection" value="$(arg frontier_selection)" />
-
-      <!-- number of clusters that are unreachable for the whole cluster to be considered unreachable -->
-      <param name="number_unreachable_frontiers_for_cluster" value="6" /> 
-
-      <rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="global_costmap" />
-      <rosparam file="$(find explorer)/param/simulation_costmap_common_params.yaml" command="load" ns="local_costmap" />
-      <rosparam file="$(find explorer)/param/simulation_local_costmap_params.yaml" command="load" />
-      <rosparam file="$(find explorer)/param/simulation_global_costmap_params.yaml" command="load" />
-
-      <remap from="/$(arg prefix)/$(arg prefix)/map" to="/$(arg prefix)/map" />
-    </node>
+    <param name="prefix" value="$(arg prefix)"/>
+    <node pkg="mappingturtles" name="explorer" type="explorer.py" output="screen"/>
+    <node pkg="mappingturtles" name="metrics" type="metrics.py" output="screen"/>
 
     <node 
       if   = "$(arg use_sim_time)"
       name = "ground_truth_publisher"  
       pkg  = "mappingturtles" 
       type = "ground_truth_publisher" 
-      args = "$(arg prefix)"
-      />
-
-    <node 
-      if   = "$(arg use_sim_time)"
-      name = "metrics"  
-      pkg  = "mappingturtles" 
-      type = "metrics" 
       args = "$(arg prefix)"
       />
 

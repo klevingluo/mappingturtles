@@ -27,8 +27,8 @@ floorplan
 )
 
 # throw in a robot
-erratic( pose [ -5.277 3.266 0.000 0 ] name "robot_0" color "red")
-erratic( pose [ -4.050 3.972 0.000 0 ] name "robot_1" color "yellow")
+erratic( pose [ -5.277 3.266 0.000 -126.875 ] name "robot_0" color "red")
+erratic( pose [ -4.050 3.972 0.000 -70.267 ] name "robot_1" color "yellow")
 # erratic( pose [ -21 -10 0.000 180.000 ] name "robot_2" color "blue")
 # erratic( pose [ -6 -9 0.000 180.000 ] name "robot_3" color "green")
 # erratic( pose [ 0.2 1.6 0.000 180.000 ] name "robot_4" color "pink")
