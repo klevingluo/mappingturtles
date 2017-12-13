@@ -16,9 +16,9 @@ class Metrics:
 
     def __init__(self):
         self.data = []
+        self.interval = 10
         self.timer = 0
         self.last_logged = 0
-        self.interval = 10
         self.travelled = 0
         self.rotated = 0
         self.mapped_area = 0
@@ -114,6 +114,7 @@ class Metrics:
         rospy.init_node('metrics', anonymous=False)
 
         self.robotname = rospy.get_param("prefix")
+        self.robotname = rospy.get_param("prefix")
 
         self.data = {
           'date': 2017,
@@ -122,7 +123,7 @@ class Metrics:
           'data': []
         }
     
-        rospy.Subscriber("map", OccupancyGrid, self.GridCallback)
+        rospy.Subscriber("merged_map", OccupancyGrid, self.GridCallback)
         rospy.Subscriber("cmd_vel", Twist, self.CmdCallback)
         rospy.Subscriber("/clock", Clock, self.ClockCallback)
     

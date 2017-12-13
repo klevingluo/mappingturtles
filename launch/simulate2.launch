@@ -22,11 +22,12 @@
     <arg name="use_sim_time" value="true" />
   </include>
 
+  <!-- visualizes the simulation -->
   <include 
     if="$(arg visualize)"
     file="$(find mappingturtles)/launch/visualization.launch"/>
 
-  <!-- for recording -->
+  <!-- records the simulation -->
   <include 
     if="$(arg record)"
     file="$(find mappingturtles)/launch/record_sim.launch">

@@ -105,7 +105,7 @@ class Explorer:
             nav_as.send_goal(self.nav_goal)
             rospy.loginfo("Waiting for result...")
             # waits for 10 seconds
-            nav_as.wait_for_result(rospy.Duration(10))
+            nav_as.wait_for_result(rospy.Duration(20))
             nav_res = nav_as.get_result()
             nav_state = nav_as.get_state()
             rospy.loginfo("Done!")
@@ -161,6 +161,7 @@ class Explorer:
 
         return mb_goal
         
+    """ converts an Occupancy grid to a mat """
     def OccupancyGridToMat(self, Occ):
         width = Occ.info.width
         height = Occ.info.height
@@ -176,9 +177,7 @@ class Explorer:
         return local_map
     
     def runNode(self):
-        rospy.init_node(
-                "explorer", 
-                anonymous=False)
+        rospy.init_node( "explorer", anonymous=False )
 
         self.robotname = rospy.get_param("prefix")
 
@@ -192,9 +191,8 @@ class Explorer:
                 PoseArray, 
                 queue_size=10)
 
-        # prefix = rospy.get_param("prefix")
         rospy.Subscriber(
-                "map", 
+                "merged_map", 
                 OccupancyGrid, 
                 self.GridCallback)
 
