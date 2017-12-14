@@ -22,6 +22,14 @@ class Metrics:
         self.travelled = 0
         self.rotated = 0
         self.mapped_area = 0
+        self.own_mapped_area = 0
+
+    def OwnMapCallback(self, data):
+        mapped_area = 0
+        for i in range(0, len(data.data)):
+            if(data.data[i] != -1 and data.data[i] < 50):
+                mapped_area += 1
+        self.own_mapped_area = mapped_area
 
     def GridCallback(self, data):
         mapped_area = 0
@@ -85,6 +93,7 @@ class Metrics:
                 'cost': self.travelled,
                 'quality': self.CalculateMapQuality(),
                 'area': self.mapped_area,
+                'own_area': self.own_mapped_area,
                 'completeness': self.CalculateMapCompleteness(),
                 }
         self.data['data'].append(entry)
@@ -124,6 +133,7 @@ class Metrics:
         }
     
         rospy.Subscriber("merged_map", OccupancyGrid, self.GridCallback)
+        rospy.Subscriber("map", OccupancyGrid, self.OwnMapCallback)
         rospy.Subscriber("cmd_vel", Twist, self.CmdCallback)
         rospy.Subscriber("/clock", Clock, self.ClockCallback)
     
